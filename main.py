@@ -12,18 +12,18 @@ def resource_path(relative_path):
         base_path = sys._MEIPASS
     except Exception:
         base_path = os.path.abspath(".")
-
-    return os.path.join(base_path, relative_path)
+    finally:   
+        return os.path.join(base_path, relative_path)
 
 FNULL = open(os.devnull, 'r')
 
-def isAdmin():
+def is_admin():
     try:
         is_admin = (os.getuid() == 0)
     except AttributeError:
         is_admin = ctypes.windll.shell32.IsUserAnAdmin() != 0
     return is_admin
-
+#константа сосет!!!
 error_log = ""
 error_num = 0
 unexpected_errors = 0
@@ -34,19 +34,12 @@ console_num = 0
 files_removed = 0
 files_replaced = 0
 
-#try:
-#    print(hthfjdh)
-#except Exception as error_:
-#    full_exc = format_exc()
-#    error_log += "Error "+str(error_num)+": \n"
-#    error_log += full_exc + "\n"
-#    error_num += 1
 
 def Increase_Progressbar():
     progressvalue0.set(progressvalue0.get()+125)
     label2["text"] = str(progressvalue0.get()/10)
 
-def Run_Getter():
+def run_getter():
     global files_removed, files_replaced, error_num, error_log, console_log
     try:
         Get_Minecraft()
@@ -64,7 +57,7 @@ def Run_Getter():
     label5["text"] = text
     w5.deiconify()
 
-def Get_Minecraft():
+def get_minecraft():
     global command1, command2, error_log, console_log, error_num, console_num, \
         unexpected_errors, files_removed, files_replaced, FNULL
     os.chdir("assets")
@@ -127,8 +120,7 @@ def Get_Minecraft():
     Increase_Progressbar()
 
 
-    #outp = os.popen(command1 % path_to_syswow64).read()
-    #outp = subprocess.Popen(command1 % path_to_syswow64, shell=True, stdout=subprocess.PIPE, bufsize=-1)
+    
     proc = subprocess.run(command1 % path_to_syswow64, capture_output=True, shell=True, stdin=FNULL)
     outp = proc.stdout.decode("utf-8")
     console_log += f"Command log {console_num}:\n"
@@ -277,8 +269,6 @@ button2.grid(row=0, column=1)
 button3 = ttk.Button(frame1, text="quit program", command=lambda: w.destroy())
 button3.grid(row=1, columnspan=2)
 
-if isAdmin():
-    pass
 else:
     label0["fg"] = "red"
     label0["text"] = "  ● No Admin permissions."
